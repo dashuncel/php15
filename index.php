@@ -16,7 +16,12 @@ require_once __DIR__.'/lib.php';
     <li>
         <a href="#">Создание таблицы в БД</a>
         <section class="create hidden">
+            <form>
+                <label>Название таблицы: <input type="text" name="tabname"></label>
+                <div class="fld">
 
+                </div>
+            </form>
         </section>
     </li>
     <li>
@@ -29,7 +34,6 @@ require_once __DIR__.'/lib.php';
 <script>
     'use strict';
     $('a').click(function(event) {
-        console.log($(this).next('section').class());
         $(this).next('section').toggleClass('hidden');
         if ($(this).hasClass('hidden')) {
             return;
