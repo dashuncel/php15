@@ -35,12 +35,12 @@ function prepareTable($query)
 
     try {
         $statement = $pdo->prepare($query);
-        $statement->execute($param);
+        $statement->execute();
     } catch (PDOException $e) {
         $errors = "Ошибка отправки запроса '$query' к БД: " . $e->getMessage() . '<br/>';
         return $errors;
     }
-
     $rows = $statement->fetchAll();
+    return $rows;
 
 }

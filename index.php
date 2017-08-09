@@ -28,17 +28,18 @@ require_once __DIR__.'/lib.php';
                             <td title="Автоинкремент">AI</td>
                             <td title="Нулевые значения не допустимы">NN</td>
                             <td title="Значение по умолчанию">DEF</td>
-                            <td>
-                                <a href="#" class="addcol">
+                            <td class="addcol">
+                                <a href="#">
                                     <img src="./img/plus.png" title="Добавить колонку">
                                 </a>
                             </td>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="template">  <!--шаблонная строка, которую копируем в таблицу, убирая при этом класс-->
+                        <!--шаблонная строка, которую копируем в таблицу, убирая при этом класс:-->
+                        <tr class="template">
                             <td>
-                                <input type="text" name="fldname[]" required>
+                                <input type="text" name="fldname[]" required value="field1">
                             </td>
                             <td>
                                 <select name="fldtype[]">
@@ -52,21 +53,24 @@ require_once __DIR__.'/lib.php';
                             <td><input type="checkbox" name="ai[]"></td>
                             <td><input type="checkbox" name="nn[]"></td>
                             <td><input type="text" name="default[]"></td>
-                            <td>
+                            <td class="delcol">
                                 <a href="#" class="delcol">
-                                    <img src="./img/minus.png" title="Удалить колонку">
+                                    <img src="./img/minus.png" title="Удалить колонку" class="delcol">
                                 </a>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+                <input type="submit" value="Создать таблицу" name="create_submit">
             </form>
         </section>
     </li>
     <li>
         <a href="#" class="mainMenu">Список таблиц БД</a>
         <section class="list hidden">
+            <ul class="tablist">
 
+            </ul>
         </section>
     </li>
 </ul>
@@ -77,24 +81,35 @@ require_once __DIR__.'/lib.php';
         if ($(this).hasClass('hidden')) {
             return;
         }
-        switch ($(this).attr('class')) {
+        switch ($(this).next('section').attr('class')) {
             case 'create':
                 break;
             case 'list':
+                $.get('query.php',
+                    '', function (data_res, request) {
+                        console.log(data_res);
+                    });
                 break;
         }
     });
 
+    // плюс - добваить колонку (строку в таблице)
     $('.addcol').click(function(event) {
         $('.template').clone().appendTo('tbody').removeClass('template');
     });
 
-    $('.delcol').click(function(event) {
-        console.log(event);
-        console.log($(this).parentUntil('tbody'));
+    // минус - удалить колонку (строку в таблице)
+    $('tbody').click(function(event) {
+        if (! $(event.target).hasClass('delcol')) {return; }
+        $(event.target).parentsUntil('tbody').last().remove();
     });
 
+    // добавление таблицы - запрос:
+    $('input[type=submit]').click(function(event) {
+        event.preventDefault();
+        const formData = new FormData('');
 
+    });
 </script>
 </body>
 </html>
