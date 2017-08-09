@@ -52,3 +52,7 @@ table {
     padding: 10px;
     min-width: 70%;
 }
+
+input[type='text'] {
+    width: 70%;
+}

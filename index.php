@@ -85,9 +85,14 @@ require_once __DIR__.'/lib.php';
         }
     });
 
-    $('addcol').click(
+    $('.addcol').click(function(event) {
+        $('.template').clone().appendTo('tbody').removeClass('template');
+    });
 
-    )
+    $('.delcol').click(function(event) {
+        console.log(event);
+        console.log($(this).parentUntil('tbody'));
+    });
 
 
 </script>
