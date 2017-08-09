@@ -2,6 +2,37 @@ body {
     margin: 0 auto;
 }
 
-.hide {
+.hidden {
     display: none;
+}
+
+section {
+    border : 1px dashed burlywood;
+    width  : 90%;
+    margin : 20px;
+}
+
+li a {
+    text-decoration: none;
+    display: block;
+    color: #6f6f6f;
+    background: #EEE;
+    -moz-box-shadow: 0 1px 0 white inset, 0 -1px 0 #d5d5d5 inset;
+    -webkit-box-shadow: 0 1px 0 white inset, 0 -1px 0 #d5d5d5 inset;
+    box-shadow: 0 1px 0 white inset, 0 -1px 0 #d5d5d5 inset;
+    text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.3);
+    padding: 20px;
+    margin: 2px;
+    width: 95%;
+}
+
+li a:hover {
+    color: #8470FF;
+    background: #f6f6f6;
+}
+
+ul {
+    list-style-type : none;
+    margin: 4px;
+    padding: 5px;
 }
