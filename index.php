@@ -17,7 +17,7 @@ require_once __DIR__.'/lib.php';
         <a href="#">Создание таблицы в БД</a>
         <section class="create hidden">
             <form>
-                <label>Название таблицы: <input type="text" name="tabname"></label>
+                <label>Наименование таблицы: <input type="text" name="tabname"></label>
                 <table>
                     <caption>Список полей:</caption>
                     <thead>
@@ -30,7 +30,7 @@ require_once __DIR__.'/lib.php';
                             <td title="Значение по умолчанию">DEF</td>
                             <td>
                                 <a href="#" class="addcol">
-                                    <img src="/img/plus.png" title="Добавить колонку">
+                                    <img src="./img/plus.png" title="Добавить колонку">
                                 </a>
                             </td>
                         </tr>
@@ -38,23 +38,23 @@ require_once __DIR__.'/lib.php';
                     <tbody>
                         <tr class="template">  <!--шаблонная строка, которую копируем в таблицу, убирая при этом класс-->
                             <td>
-                                <input type="text" name="fldname" required>
+                                <input type="text" name="fldname[]" required>
                             </td>
                             <td>
-                                <select name="fldtype">
+                                <select name="fldtype[]">
                                     <option>INT</option>
                                     <option>VARCHAR</option>
                                     <option>DECIMAL</option>
                                     <option>DATETIME</option>
                                 </select>
                             </td>
-                            <td><input type="checkbox" name="pk"></td>
-                            <td><input type="checkbox" name="ai"></td>
-                            <td><input type="checkbox" name="nn"></td>
-                            <td><input type="text" name="default"></td>
+                            <td><input type="checkbox" name="pk[]"></td>
+                            <td><input type="checkbox" name="ai[]"></td>
+                            <td><input type="checkbox" name="nn[]"></td>
+                            <td><input type="text" name="default[]"></td>
                             <td>
                                 <a href="#" class="delcol">
-                                    <img src="/img/minus.png" title="Удалить колонку">
+                                    <img src="./img/minus.png" title="Удалить колонку">
                                 </a>
                             </td>
                         </tr>

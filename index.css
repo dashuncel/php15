@@ -1,5 +1,6 @@
 body {
     margin: 0 auto;
+    background: linear-gradient(50deg, hsl(80, 50%, 50%), hsl(200, 50%, 50%));
 }
 
 .hidden {
@@ -8,11 +9,15 @@ body {
 
 section {
     border : 1px dashed burlywood;
-    width  : 90%;
-    margin : 20px;
+    padding: 20px;
+    margin: 20px;
 }
 
-li a {
+caption {
+    text-align: left;
+}
+
+li > a {
     text-decoration: none;
     display: block;
     color: #6f6f6f;
@@ -22,8 +27,7 @@ li a {
     box-shadow: 0 1px 0 white inset, 0 -1px 0 #d5d5d5 inset;
     text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.3);
     padding: 20px;
-    margin: 2px;
-    width: 95%;
+    margin: 20px;
 }
 
 li a:hover {
