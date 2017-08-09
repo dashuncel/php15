@@ -87,10 +87,12 @@ require_once __DIR__.'/lib.php';
             case 'list':
                 $.get('query.php',
                     '', function (data_res, request) {
-                        let myData = JSON.parse(data_res);
+                    console.log(data_res);
+                        /*let myData = JSON.parse(data_res);
+                        $('.tablist').html('Таблицы базы данных ' + "<?php echo $database ?>");
                         myData.forEach(function (item) {
-
-                        });
+                            $('.tablist').append(`<ul><a href='#' class='tabitem'>${item.Tables_in_global}</a></ul>`);
+                        });*/
                     });
                 break;
         }
@@ -111,7 +113,6 @@ require_once __DIR__.'/lib.php';
     $('input[type=submit]').click(function(event) {
         event.preventDefault();
         const formData = new FormData('');
-
     });
 </script>
 </body>
