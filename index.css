@@ -1,6 +1,6 @@
 body {
     margin: 0 auto;
-    background: linear-gradient(50deg, hsl(80, 50%, 50%), hsl(200, 50%, 50%));
+    background: linear-gradient(50deg, hsl(80, 40%, 70%), hsl(200, 40%, 70%));
 }
 
 .hidden {
@@ -15,6 +15,7 @@ section {
 
 caption {
     text-align: left;
+    padding: 10px 0px 20px 0px;
 }
 
 li > a {
@@ -27,7 +28,7 @@ li > a {
     box-shadow: 0 1px 0 white inset, 0 -1px 0 #d5d5d5 inset;
     text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.3);
     padding: 20px;
-    margin: 20px;
+    margin: 0px 20px 2px 20px;
 }
 
 li a:hover {
@@ -43,4 +44,11 @@ ul {
 
 .template {
     display: none;
+}
+
+table {
+    border: 1px solid blue;
+    border-collapse: separate;
+    padding: 10px;
+    min-width: 70%;
 }

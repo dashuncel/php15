@@ -14,7 +14,7 @@ require_once __DIR__.'/lib.php';
 <body>
 <ul class="main">
     <li>
-        <a href="#">Создание таблицы в БД</a>
+        <a href="#" class="mainMenu">Создание таблицы в БД</a>
         <section class="create hidden">
             <form>
                 <label>Наименование таблицы: <input type="text" name="tabname"></label>
@@ -64,7 +64,7 @@ require_once __DIR__.'/lib.php';
         </section>
     </li>
     <li>
-        <a href="#">Список таблиц БД</a>
+        <a href="#" class="mainMenu">Список таблиц БД</a>
         <section class="list hidden">
 
         </section>
@@ -72,7 +72,7 @@ require_once __DIR__.'/lib.php';
 </ul>
 <script>
     'use strict';
-    $('a').click(function(event) {
+    $('.mainMenu').click(function(event) {
         $(this).next('section').toggleClass('hidden');
         if ($(this).hasClass('hidden')) {
             return;
@@ -84,6 +84,11 @@ require_once __DIR__.'/lib.php';
                 break;
         }
     });
+
+    $('addcol').click(
+
+    )
+
 
 </script>
 </body>
