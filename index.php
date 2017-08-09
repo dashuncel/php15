@@ -87,7 +87,10 @@ require_once __DIR__.'/lib.php';
             case 'list':
                 $.get('query.php',
                     '', function (data_res, request) {
-                        console.log(data_res);
+                        let myData = JSON.parse(data_res);
+                        myData.forEach(function (item) {
+
+                        });
                     });
                 break;
         }
