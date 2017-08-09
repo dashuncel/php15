@@ -17,8 +17,7 @@ elseif ($_SERVER["REQUEST_METHOD"] == 'POST') {
     switch ($_POST['type']) {
         case 'create' :
             break;
-        case 'getinfo' :
-
+        case 'update' :
             break;
     }
 }
