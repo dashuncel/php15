@@ -31,19 +31,25 @@ elseif ($_SERVER["REQUEST_METHOD"] == 'POST') {
             $query = "create table `{$_POST['tabname']} `";
             foreach ($_POST['fldname'] as $key => $fldname) {
                 // это скрытый шаблон строки, его пропускаем:
-                if ( $key === 0 ) { continue; }
+                if ( $key === 0 ) {
+                    continue;
+                }
 
                 // проверка дублирующих полей:
-                
+                if (in_array($fldname, $fldnames)) {
+                    continue;
+                }
+                $fldnames[] = $fldname;
 
-                $query .= " `{$fldname}` ` {$_POST['fldtype'][$key]}` ";
+                // генерация запроса на добавление таблицы:
+                $query .= " `{trim($fldname)}` ` {trim($_POST['fldtype'][$key])}` ";
                 if (isset($_POST['nn'][$key])) {
                     $query .= " NOT NULL ";
                 }
                 if (isset($_POST['pk'][$key])) {
                     $pk[] = "`$fldname`";
                 }
-                if (isset($_POST['default'][$key])) {
+                if (isset($_POST['default'][$key]) && $_POST['default'][$key] != '') {
                     $query .= " DEFAULT  {$_POST['default'][$key]} ";
                 }
                 $query .= ',';
@@ -58,7 +64,7 @@ elseif ($_SERVER["REQUEST_METHOD"] == 'POST') {
             $query = "alert table `{$_POST['tabname']}`";
             break;
     }
-
     echo $query;
     $result = prepareTable($query);
+    echo $result;
 }
