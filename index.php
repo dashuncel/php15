@@ -15,9 +15,10 @@ require_once __DIR__.'/lib.php';
 <ul class="main">
     <li>
         <a href="#" class="mainMenu">Создание таблицы в БД</a>
-        <section class="create hidden">
-            <form class="mainform">
-                <label>Наименование таблицы:<br /> <input type="text" name="tabname"></label>
+        <section class="create">
+            <form class="mainform" method="POST" enctype="application/x-www-form-urlencoded" action="query.php">
+                <input type="hidden" name="typeQuery" value="create">
+                <label>Наименование таблицы:<br /> <input type="text" name="tabname" value="table1"></label>
                 <table>
                     <caption>Список полей:</caption>
                     <thead>
@@ -36,7 +37,6 @@ require_once __DIR__.'/lib.php';
                         </tr>
                     </thead>
                     <tbody>
-                        <!--шаблонная строка, которую копируем в таблицу, убирая при этом класс:-->
                         <tr class="template">
                             <td>
                                 <input type="text" name="fldname[]" required value="field0">
@@ -61,7 +61,7 @@ require_once __DIR__.'/lib.php';
                         </tr>
                     </tbody>
                 </table>
-                <input type="submit" value="Создать таблицу" name="create_submit">
+                <input type="submit" value="Создать таблицу" name="createsubmit">
             </form>
         </section>
     </li>
@@ -76,7 +76,7 @@ require_once __DIR__.'/lib.php';
 </ul>
 <script>
     'use strict';
-    let counter = 1;
+    let counter = 1; // счетчик добавленных полей
     $('.mainMenu').click(function(event) {
         $(this).next('section').toggleClass('hidden');
         if ($(this).hasClass('hidden')) {
@@ -115,18 +115,6 @@ require_once __DIR__.'/lib.php';
     $('tbody').click(function(event) {
         if (! $(event.target).hasClass('delcol')) {return; }
         $(event.target).parentsUntil('tbody').last().remove();
-    });
-
-    // добавление таблицы - запрос:
-    $('input[type=submit]').click(function(event) {
-        event.preventDefault();
-        let formData = new FormData($('.mainform'));
-        formData.append('typeQuery','create');
-        $.post("query.php",
-            $('.mainform').serialize(),
-            function(data, status) {
-            }
-        );
     });
 
 </script>
