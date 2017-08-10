@@ -14,10 +14,11 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
 }
 elseif ($_SERVER["REQUEST_METHOD"] == 'POST') {
     $query = '';
+    /*
     echo "<pre>";
     print_r($_POST);
     echo "</pre>";
-
+    */
     if (! isset($_POST['typeQuery'])) {
         exit;
     }
@@ -28,7 +29,7 @@ elseif ($_SERVER["REQUEST_METHOD"] == 'POST') {
             $pk = []; // массив pk
             $fldnames = []; // массив полей для защиты от дублей
 
-            $query = "create table `{$_POST['tabname']} `";
+            $query = "create table `{$_POST['tabname']}` ( ";
             foreach ($_POST['fldname'] as $key => $fldname) {
                 // это скрытый шаблон строки, его пропускаем:
                 if ( $key === 0 ) {
@@ -42,7 +43,8 @@ elseif ($_SERVER["REQUEST_METHOD"] == 'POST') {
                 $fldnames[] = $fldname;
 
                 // генерация запроса на добавление таблицы:
-                $query .= " `{trim($fldname)}` ` {trim($_POST['fldtype'][$key])}` ";
+                $fldname = trim($fldname);
+                $query .= " `{$fldname}` {$_POST['fldtype'][$key]} ";
                 if (isset($_POST['nn'][$key])) {
                     $query .= " NOT NULL ";
                 }
@@ -52,19 +54,20 @@ elseif ($_SERVER["REQUEST_METHOD"] == 'POST') {
                 if (isset($_POST['default'][$key]) && $_POST['default'][$key] != '') {
                     $query .= " DEFAULT  {$_POST['default'][$key]} ";
                 }
-                $query .= ',';
+                if ($key + 1 < count($_POST['fldname'])) {
+                    $query .= ',';
+                }
             }
             $strpk = implode(', ', $pk);
-            if (isset($strpk)) {
-                $query .=  " PRIMARY KEY ( $strpk ), ";
+            if (isset($strpk) && $strpk != '') {
+                $query .=  " PRIMARY KEY ( $strpk )";
             }
-            $query .= ' ENGINE=InnoDB DEFAULT CHARSET = utf8';
+            $query .= ') ENGINE=InnoDB DEFAULT CHARSET = utf8';
             break;
         case 'update' : // изменение полей в таблице:
             $query = "alert table `{$_POST['tabname']}`";
             break;
     }
-    echo $query;
-    $result = prepareTable($query);
+    $result = json_encode(prepareTable($query));
     echo $result;
 }

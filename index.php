@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__.'/lib.php';
-
 ?>
 
 <!DOCTYPE html>
@@ -61,7 +60,7 @@ require_once __DIR__.'/lib.php';
                         </tr>
                     </tbody>
                 </table>
-                <input type="submit" value="Создать таблицу" name="createsubmit">
+                <input type="submit" value="Создать таблицу" name="createsubmit" disabled>
             </form>
         </section>
     </li>
@@ -73,10 +72,18 @@ require_once __DIR__.'/lib.php';
             </ul>
         </section>
     </li>
+    <li>
+        <a href="#" class="mainMenu">Результат работы</a>
+        <section class="result">
+            <output></output>
+        </section>
+    </li>
 </ul>
+
 <script>
     'use strict';
     let counter = 1; // счетчик добавленных полей
+    chkButton();
     $('.mainMenu').click(function(event) {
         $(this).next('section').toggleClass('hidden');
         if ($(this).hasClass('hidden')) {
@@ -109,14 +116,32 @@ require_once __DIR__.'/lib.php';
         $('.template').clone().appendTo('tbody').removeClass('template').attr('id','tab1_' + counter);
         $('#tab1_' + counter + ' input[name^="fldname"]').attr('value', 'field' + counter);
         counter++;
+        chkButton();
     });
 
     // минус - удалить колонку (строку в таблице)
     $('tbody').click(function(event) {
         if (! $(event.target).hasClass('delcol')) {return; }
         $(event.target).parentsUntil('tbody').last().remove();
+        chkButton();
     });
 
+    $('input[type=submit]').click(function(event) {
+        event.preventDefault();
+        $.post("query.php",
+            $('.mainform').serialize(),
+            function (data, result) {
+                $('output').html(data);
+            });
+    });
+
+    function chkButton() {
+        if ($('tbody').children('tr').length <= 1) {
+            $('input[type=submit]').attr('disabled', true);
+        } else {
+            $('input[type=submit]').removeAttr('disabled');
+        }
+    }
 </script>
 </body>
 </html>

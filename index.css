@@ -88,6 +88,10 @@ input[type=submit] {
     cursor: pointer;
 }
 
+input[type=submit]:disabled {
+    background-color: lightgrey;
+}
+
 img {
     width: 100%;
 }
