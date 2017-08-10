@@ -16,8 +16,8 @@ require_once __DIR__.'/lib.php';
     <li>
         <a href="#" class="mainMenu">Создание таблицы в БД</a>
         <section class="create hidden">
-            <form>
-                <label>Наименование таблицы: <input type="text" name="tabname"></label>
+            <form class="mainform">
+                <label>Наименование таблицы:<br /> <input type="text" name="tabname"></label>
                 <table>
                     <caption>Список полей:</caption>
                     <thead>
@@ -39,7 +39,7 @@ require_once __DIR__.'/lib.php';
                         <!--шаблонная строка, которую копируем в таблицу, убирая при этом класс:-->
                         <tr class="template">
                             <td>
-                                <input type="text" name="fldname[]" required value="field1">
+                                <input type="text" name="fldname[]" required value="field0">
                             </td>
                             <td>
                                 <select name="fldtype[]">
@@ -76,6 +76,7 @@ require_once __DIR__.'/lib.php';
 </ul>
 <script>
     'use strict';
+    let counter = 1;
     $('.mainMenu').click(function(event) {
         $(this).next('section').toggleClass('hidden');
         if ($(this).hasClass('hidden')) {
@@ -87,12 +88,17 @@ require_once __DIR__.'/lib.php';
             case 'list':
                 $.get('query.php',
                     '', function (data_res, request) {
-                    console.log(data_res);
-                        /*let myData = JSON.parse(data_res);
+                        let strAdd = '';
                         $('.tablist').html('Таблицы базы данных ' + "<?php echo $database ?>");
+                        let myData = JSON.parse(data_res);
                         myData.forEach(function (item) {
-                            $('.tablist').append(`<ul><a href='#' class='tabitem'>${item.Tables_in_global}</a></ul>`);
-                        });*/
+                            strAdd += `<li>${item.Tables_in_global}<table><tbody class=''>`;
+                            myData.fld.forEach(function(item){
+                                strAdd += $('.template').clone();
+                            });
+                            strAdd += '</tbody></table></li>';
+                        });
+                        $('.tablist').append(strAdd);
                     });
                 break;
         }
@@ -100,7 +106,9 @@ require_once __DIR__.'/lib.php';
 
     // плюс - добваить колонку (строку в таблице)
     $('.addcol').click(function(event) {
-        $('.template').clone().appendTo('tbody').removeClass('template');
+        $('.template').clone().appendTo('tbody').removeClass('template').attr('id','tab1_' + counter);
+        $('#tab1_' + counter + ' input[name^="fldname"]').attr('value', 'field' + counter);
+        counter++;
     });
 
     // минус - удалить колонку (строку в таблице)
@@ -112,8 +120,15 @@ require_once __DIR__.'/lib.php';
     // добавление таблицы - запрос:
     $('input[type=submit]').click(function(event) {
         event.preventDefault();
-        const formData = new FormData('');
+        let formData = new FormData($('.mainform'));
+        formData.append('typeQuery','create');
+        $.post("query.php",
+            $('.mainform').serialize(),
+            function(data, status) {
+            }
+        );
     });
+
 </script>
 </body>
 </html>

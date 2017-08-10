@@ -13,11 +13,25 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
     echo $result;
 }
 elseif ($_SERVER["REQUEST_METHOD"] == 'POST') {
-    var_dump($_POST);
-    switch ($_POST['type']) {
+    $query = '';
+    echo '<pre>';
+    print_r($_POST);
+    echo '</pre>';
+
+    if (! isset($_POST['typeQuery'])) {
+        exit;
+    }
+
+    $typeQuery = $_POST['typeQuery'];
+    switch ($typeQuery) {
         case 'create' :
+            $query = "create table `{$_POST['tabname']}`";
+            /*foreach () {
+
+            }*/
             break;
         case 'update' :
+            $query = "alert table `{$_POST['tabname']}`";
             break;
     }
 }

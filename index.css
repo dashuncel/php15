@@ -51,20 +51,41 @@ table {
     border-collapse: separate;
     padding: 10px;
     min-width: 70%;
+    text-align: center;
+    font-size: 16px;
 }
 
-input[type='text'] {
+input[type='text'], select {
     color: #777;
     padding-left: 10px;
     margin: 10px;
-    margin-top: 12px;
-    margin-left: 18px;
-    width: 290px;
     height: 35px;
+    width: 70%;
     border: 1px solid #c7d0d2;
     border-radius: 2px;
     box-shadow: inset 0 1.5px 3px rgba(190, 190, 190, .4), 0 0 0 5px #f5f7f8;
     transition: all .4s ease;
+}
+
+input[type='checkbox'] {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 3px;
+}
+
+input[type=submit] {
+    margin-right: 20px;
+    margin-top: 20px;
+    width: 20%;
+    height: 40px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background-color: forestgreen;
+    border: 1px solid #66add6;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .3), inset 0 1px 0 rgba(255, 255, 255, .5);
+    cursor: pointer;
 }
 
 img {
