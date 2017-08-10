@@ -96,12 +96,14 @@ require_once __DIR__.'/lib.php';
                 $.get('query.php',
                     '', function (data_res, request) {
                         let strAdd = '';
+                        let strFld = '';
+
                         $('.tablist').html('Таблицы базы данных ' + "<?php echo $database ?>");
                         let myData = JSON.parse(data_res);
                         myData.forEach(function (item) {
                             strAdd += `<li>${item.Tables_in_global}<table><tbody class=''>`;
                             myData.fld.forEach(function(item){
-                                strAdd += $('.template').clone();
+                                strFld = $('.template').clone();
                             });
                             strAdd += '</tbody></table></li>';
                         });

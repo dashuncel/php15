@@ -68,6 +68,13 @@ elseif ($_SERVER["REQUEST_METHOD"] == 'POST') {
             $query = "alert table `{$_POST['tabname']}`";
             break;
     }
-    $result = json_encode(prepareTable($query));
-    echo $result;
+    $result = prepareTable($query);
+    echo "Запрос $query<br />";
+
+    if (count($result) == 0) {
+        echo "Результат: успешно";
+    } else {
+        echo "Результат: json_encode($result)";
+    }
+
 }
