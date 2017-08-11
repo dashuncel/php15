@@ -11,9 +11,6 @@ require_once __DIR__.'/lib.php';
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
 </head>
 <body>
-<div id="modal-wrapper" class="hidden">
-
-</div>
 <ul class="main">
     <li>
         <a href="#" class="mainMenu">Создание таблицы в БД</a>
@@ -45,8 +42,8 @@ require_once __DIR__.'/lib.php';
                             </td>
                             <td>
                                 <select name="fldtype[]">
-                                    <option>INT</option>
-                                    <option>VARCHAR</option>
+                                    <option>INT(11)</option>
+                                    <option>VARCHAR(20)</option>
                                     <option>DECIMAL</option>
                                     <option>DATETIME</option>
                                 </select>
@@ -69,6 +66,21 @@ require_once __DIR__.'/lib.php';
     </li>
     <li>
         <a href="#" class="mainMenu">Список таблиц БД</a>
+        <div class="hidden chgecol_form">
+            <form class="subform" method="POST" enctype="application/x-www-form-urlencoded" action="query.php">
+                <fieldset>
+                    <caption>Редактирование элемента</caption>
+                    <label><input type="text" id="newcol" name="newcol" required></label>
+                    <select id="newtype" name="newtype" required>
+                        <option>INT(1)</option>
+                        <option>VARCHAR(40)</option>
+                        <option>DECIMAL</option>
+                        <option>DATETIME</option>
+                    </select><br/>
+                    <input type="submit" value="Редактировать поле" name="changesubmit">
+                </fieldset>
+            </form>
+        </div>
         <section class="list hidden">
             <ul class="tablist">
 
@@ -88,35 +100,15 @@ require_once __DIR__.'/lib.php';
     let counter = 1; // счетчик добавленных полей
     chkButton();
     $('.mainMenu').click(function(event) {
-        $(this).next('section').toggleClass('hidden');
+        $(this).nextAll('section').toggleClass('hidden');
         if ($(this).hasClass('hidden')) {
             return;
         }
-        switch ($(this).next('section').attr('class')) {
+        switch ($(this).nextAll('section').attr('class')) {
             case 'create':
                 break;
             case 'list':
-                $.get('query.php',
-                    '',
-                    function (data_res, request) {
-                        let strFld = '';
-
-                        $('.tablist').html('Таблицы базы данных ' + "<?php echo $database ?>");
-                        let myData = JSON.parse(data_res);
-                        myData.forEach(function (item) {
-                            let tab_name = item.Tables_in_<?=$database?>;
-                            $('.tablist').append(`<li class="${tab_name}">Структура таблицы ${tab_name}: <ul class="${tab_name}"></ul></li>`);
-                            strFld = '';
-                            item.fld.forEach(function (fld) {
-                                strFld += `<li class="${fld.Field}">${fld.Field} ${fld.Type}`;
-                                // две кнопки на удаление и на изменение колонки:
-                                strFld += '<img src="./img/drop.png" title="Удалить колонку" class="dropcol">';
-                                strFld += '<img src="./img/edit.png" title="Редактировать колонку" class="chgecol">';
-                                strFld +='</li>';
-                            });
-                            $('ul.' + tab_name).html(strFld);
-                        });
-                    });
+                getTableList();
                 break;
         };
     });
@@ -136,7 +128,7 @@ require_once __DIR__.'/lib.php';
          chkButton();
     });
 
-    $('input[type=submit]').click(function(event) {
+    $('input[name=createsubmit]').click(function(event) {
         event.preventDefault();
         $.post("query.php",
             $('.mainform').serialize(),
@@ -150,9 +142,9 @@ require_once __DIR__.'/lib.php';
     //состояние кнопки ДОбавить таблицу:
     function chkButton() {
         if ($('tbody').children('tr').length <= 1) {
-            $('input[type=submit]').attr('disabled', true);
+            $('input[name=createsubmit]').attr('disabled', true);
         } else {
-            $('input[type=submit]').removeAttr('disabled');
+            $('input[name=createsubmit]').removeAttr('disabled');
         }
     }
 
@@ -162,6 +154,7 @@ require_once __DIR__.'/lib.php';
         if (event.target.tagName != 'IMG') { return; }
         let tabname = $(event.target).parentsUntil('ul.tablist').last().attr('class');
         let colname = $(event.target).parentsUntil('ul.' + tabname).last().attr('class');
+            console.log(tabname, colname, $(event.target).attr('class'));
 
         switch ($(event.target).attr('class')) {
             case 'dropcol':
@@ -176,17 +169,47 @@ require_once __DIR__.'/lib.php';
                     }
                 );
                 break;
-            case 'changecol': // в процессе реализации:
-                /*$.post("query.php",
-                    {typeQuery: "updatecol", id : id, numQuery: tab, assigned: val, sort: desc, column : col},
-                    function(data, result) {
-                        setData(data, tab);
-                    }
-                )*/
+            case 'chgecol': // в процессе реализации:
+                console.log('z tet!');
+                $('#newcol').attr('value', colname);
+                $('#newtype').attr('value', $(event.target).parentsUntil('ul.' + tabname).attr('data-type'));
+                console.log($('.chgecol_form').attr('class'));
+                $('.chgecol_form').removeClass('hidden');
                 break;
         }
-    })
+    });
 
+    $('input[name=changesubmit]').click(function() {
+        $.post("query.php",
+            {typeQuery: "updatecol", id : id, numQuery: tab, assigned: val, sort: desc, column : col},
+            function(data, result) {
+            }
+        )
+    });
+
+    function getTableList() {
+        $.get('query.php',
+            '',
+            function (data_res, request) {
+                let strFld = '';
+
+                $('.tablist').html('Таблицы базы данных ' + "<?php echo $database ?>");
+                let myData = JSON.parse(data_res);
+                myData.forEach(function (item) {
+                    let tab_name = item.Tables_in_<?=$database?>;
+                    $('.tablist').append(`<li class="${tab_name}">Структура таблицы ${tab_name}: <ul class="${tab_name}"></ul></li>`);
+                    strFld = '';
+                    item.fld.forEach(function (fld) {
+                        strFld += `<li class="${fld.Field}" data-type="${fld.Type}">${fld.Field} ${fld.Type}`;
+                        // две кнопки на удаление и на изменение колонки:
+                        strFld += '<img src="./img/drop.png" title="Удалить колонку" class="dropcol">';
+                        strFld += '<img src="./img/edit.png" title="Редактировать колонку" class="chgecol">';
+                        strFld +='</li>';
+                    });
+                    $('ul.' + tab_name).html(strFld);
+                });
+            });
+    }
 </script>
 </body>
 </html>

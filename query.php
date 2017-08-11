@@ -70,7 +70,6 @@ elseif ($_SERVER["REQUEST_METHOD"] == 'POST') {
         case 'dropcol' : // удаление поля в таблице:
             $query = "ALTER TABLE {$_POST['tab']} DROP COLUMN {$_POST['col']}";
             break;
-
     }
     $result = prepareTable($query);
     echo "Запрос $query<br />";
