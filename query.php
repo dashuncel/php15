@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
     $tablist = prepareTable("Show tables");
     $tabcopy = $tablist;
     foreach ($tablist as $key => $tab) {
-        $tabcopy[$key]['fld'] = prepareTable("Describe {$tab['Tables_in_' . $database]}");
+        $tabcopy[$key]['fld'] = prepareTable("Describe `{$tab['Tables_in_' . $database]}`");
     }
     $result = json_encode($tabcopy);
     echo $result;

@@ -209,20 +209,27 @@ require_once __DIR__.'/lib.php';
                     myData = JSON.parse(data_res);
                 }
                 catch (err) {
-                    $('output').html(data_res + "<br/>" + err);
+                    strFld = $('output').html();
+                    $('output').html(strFld + "<br/>" + data_res + "<br/>" + err);
                 }
+
                 myData.forEach(function (item) {
                     let tab_name = item.Tables_in_<?=$database?>;
                     $('.tablist').append(`<li class="${tab_name}">Структура таблицы <strong>"${tab_name}"</strong>: <ul class="${tab_name}"></ul></li>`);
-                    strFld = '';
-                    item.fld.forEach(function (fld) {
-                        strFld += `<li class="${fld.Field}" data-type="${fld.Type}">${fld.Field} ${fld.Type}`;
-                        // две кнопки на удаление и на изменение колонки:
-                        strFld += '<img src="./img/drop.png" title="Удалить колонку" class="dropcol">';
-                        strFld += '<a href="#editcol"><img src="./img/edit.png" title="Редактировать колонку" class="chgecol"></a>';
-                        strFld +='</li>';
-                    });
-                    $('ul.' + tab_name).html(strFld);
+                    if (item.fld instanceof Array) {
+                        strFld = '';
+                        item.fld.forEach(function (fld) {
+                            strFld += `<li class="${fld.Field}" data-type="${fld.Type}">${fld.Field} ${fld.Type}`;
+                            // две кнопки на удаление и на изменение колонки:
+                            strFld += '<img src="./img/drop.png" title="Удалить колонку" class="dropcol">';
+                            strFld += '<a href="#editcol"><img src="./img/edit.png" title="Редактировать колонку" class="chgecol"></a>';
+                            strFld +='</li>';
+                        });
+                        $('ul.' + tab_name).html(strFld);
+                    }
+                    else {
+                        $('ul.' + tab_name).html(item.fld);
+                    }
                 });
             });
     }
