@@ -12,6 +12,7 @@ $database=LOGIN;
 $user='root';
 $password='';
 $database='global';
+
 $errors=[];
 
 $opt = [

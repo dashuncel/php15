@@ -111,6 +111,7 @@ require_once __DIR__.'/lib.php';
                                 strFld += '<img src="./img/edit.png" title="Редактировать колонку" class="changecol">';
                                 strFld +='</li>';
                             });
+                            console.log(strFld);
                             $('ul.' + tab_name).html(strFld);
                         });
                     });
