@@ -4,15 +4,16 @@ require_once 'mydata.php';
 
 $host='localhost';
 $dbport=3306;
-/*
+
 $user=LOGIN;
 $password=PASSWD;
 $database=LOGIN;
-*/
+
+/*
 $user='root';
 $password='';
 $database='global';
-
+*/
 $errors=[];
 
 $opt = [
@@ -41,7 +42,13 @@ function prepareTable($query)
         $errors = "Ошибка отправки запроса '$query' к БД: " . $e->getMessage() . '<br/>';
         return $errors;
     }
-    $rows = $statement->fetchAll();
+
+    try {
+        $rows = $statement->fetchAll();
+    } catch (Exception $e) {
+        $rows = $e;
+    }
+
     return $rows;
 
 }

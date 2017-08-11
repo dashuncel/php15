@@ -202,12 +202,18 @@ require_once __DIR__.'/lib.php';
             '',
             function (data_res, request) {
                 let strFld = '';
+                let myData = '';
 
                 $('.tablist').html('Таблицы базы данных ' + "<?php echo $database ?>");
-                let myData = JSON.parse(data_res);
+                try {
+                    myData = JSON.parse(data_res);
+                }
+                catch (err) {
+                    $('output').html(data_res + "<br/>" + err);
+                }
                 myData.forEach(function (item) {
                     let tab_name = item.Tables_in_<?=$database?>;
-                    $('.tablist').append(`<li class="${tab_name}">Структура таблицы ${tab_name}: <ul class="${tab_name}"></ul></li>`);
+                    $('.tablist').append(`<li class="${tab_name}">Структура таблицы <strong>"${tab_name}"</strong>: <ul class="${tab_name}"></ul></li>`);
                     strFld = '';
                     item.fld.forEach(function (fld) {
                         strFld += `<li class="${fld.Field}" data-type="${fld.Type}">${fld.Field} ${fld.Type}`;

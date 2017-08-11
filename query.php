@@ -74,7 +74,7 @@ elseif ($_SERVER["REQUEST_METHOD"] == 'POST') {
     $result = prepareTable($query);
     echo "Запрос $query<br />";
 
-    if (count($result) == 0) {
+    if (count($result) == 0 || ($result == '')) {
         echo "Результат: успешно";
     } else {
         echo "Результат: json_encode($result)";
