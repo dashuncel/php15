@@ -64,9 +64,13 @@ elseif ($_SERVER["REQUEST_METHOD"] == 'POST') {
             }
             $query .= ') ENGINE=InnoDB DEFAULT CHARSET = utf8';
             break;
-        case 'update' : // изменение полей в таблице:
-            $query = "alert table `{$_POST['tabname']}`";
+        case 'updatecol' : // изменение полей в таблице:
+            $query = "ALTER TABLE {$_POST['tab']} CHANGE {$_POST['col']} {$_POST['newcol']} {$_POST['newtype']}";
             break;
+        case 'dropcol' : // удаление поля в таблице:
+            $query = "ALTER TABLE {$_POST['tab']} DROP COLUMN {$_POST['col']}";
+            break;
+
     }
     $result = prepareTable($query);
     echo "Запрос $query<br />";

@@ -99,18 +99,17 @@ require_once __DIR__.'/lib.php';
                         let strFld = '';
 
                         $('.tablist').html('Таблицы базы данных ' + "<?php echo $database ?>");
-                        console.log(data_res);
                         let myData = JSON.parse(data_res);
 
                         myData.forEach(function (item) {
                             let tab_name = item.Tables_in_<?=$database?>;
-                            $('.tablist').append(`<li>Структура таблицы ${tab_name}: <ul class="${tab_name}"></ul></li>`);
+                            $('.tablist').append(`<li class="${tab_name}">Структура таблицы ${tab_name}: <ul class="${tab_name}"></ul></li>`);
                             strFld = '';
                             item.fld.forEach(function (fld) {
                                 strFld += `<li class="${fld.Field}">${fld.Field} ${fld.Type}`;
                                 // две кнопки на удаление и на изменение колонки:
                                 strFld += '<img src="./img/drop.png" title="Удалить колонку" class="dropcol">';
-                                strFld += '<img src="./img/edit.png" title="Редактировать колонку" class="changecol">';
+                                strFld += '<img src="./img/edit.png" title="Редактировать колонку" class="chgecol">';
                                 strFld +='</li>';
                             });
                             $('ul.' + tab_name).html(strFld);
@@ -128,11 +127,11 @@ require_once __DIR__.'/lib.php';
         chkButton();
     });
 
-    // минус - удалить колонку (строку в новой таблице )
+   // минус - удалить колонку (строку в новой таблице )
     $('tbody').click(function(event) {
         if (! $(event.target).hasClass('delcol')) {return; }
         $(event.target).parentsUntil('tbody').last().remove();
-        chkButton();
+         chkButton();
     });
 
     $('input[type=submit]').click(function(event) {
@@ -141,6 +140,7 @@ require_once __DIR__.'/lib.php';
             $('.mainform').serialize(),
             function (data, result) {
                 $('output').html(data);
+                $('.result').show();
             });
     });
 
@@ -152,6 +152,38 @@ require_once __DIR__.'/lib.php';
             $('input[type=submit]').removeAttr('disabled');
         }
     }
+
+    // dropcol - удалить колонку в существующей таблице
+    // chgcol - изменить колонку в существующей таблице
+    $('.tablist').click(function(event) {
+        if (event.target.tagName != 'IMG') { return; }
+        let tabname = $(event.target).parentsUntil('ul.tablist').last().attr('class');
+        let colname = $(event.target).parentsUntil('ul.' + tabname).last().attr('class');
+
+        switch ($(event.target).attr('class')) {
+            case 'dropcol':
+                $.post("query.php",
+                    {typeQuery: "dropcol", tab: tabname, col: colname},
+                    function(data, result) {
+                        $('output').html(data);
+                        $('.result').show();
+                        if (result == 'success') {
+                            $(event.target).parentsUntil('ul.' + tabname).last().remove();
+                        }
+                    }
+                );
+                break;
+            case 'changecol':
+                /*$.post("query.php",
+                    {typeQuery: "updatecol", id : id, numQuery: tab, assigned: val, sort: desc, column : col},
+                    function(data, result) {
+                        setData(data, tab);
+                    }
+                )*/
+                break;
+        }
+    })
+
 </script>
 </body>
 </html>
