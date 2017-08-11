@@ -99,9 +99,11 @@ require_once __DIR__.'/lib.php';
                         let strFld = '';
 
                         $('.tablist').html('Таблицы базы данных ' + "<?php echo $database ?>");
+                        console.log(data_res);
                         let myData = JSON.parse(data_res);
+
                         myData.forEach(function (item) {
-                            let tab_name = item.Tables_in_global;
+                            let tab_name = item.Tables_in_<?=$database?>;
                             $('.tablist').append(`<li>Структура таблицы ${tab_name}: <ul class="${tab_name}"></ul></li>`);
                             strFld = '';
                             item.fld.forEach(function (fld) {
@@ -111,7 +113,6 @@ require_once __DIR__.'/lib.php';
                                 strFld += '<img src="./img/edit.png" title="Редактировать колонку" class="changecol">';
                                 strFld +='</li>';
                             });
-                            console.log(strFld);
                             $('ul.' + tab_name).html(strFld);
                         });
                     });
@@ -143,6 +144,7 @@ require_once __DIR__.'/lib.php';
             });
     });
 
+    //состояние кнопки ДОбавить таблицу:
     function chkButton() {
         if ($('tbody').children('tr').length <= 1) {
             $('input[type=submit]').attr('disabled', true);
