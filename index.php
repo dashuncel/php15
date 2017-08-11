@@ -11,6 +11,9 @@ require_once __DIR__.'/lib.php';
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
 </head>
 <body>
+<div id="modal-wrapper" class="hidden">
+
+</div>
 <ul class="main">
     <li>
         <a href="#" class="mainMenu">Создание таблицы в БД</a>
@@ -100,7 +103,6 @@ require_once __DIR__.'/lib.php';
 
                         $('.tablist').html('Таблицы базы данных ' + "<?php echo $database ?>");
                         let myData = JSON.parse(data_res);
-
                         myData.forEach(function (item) {
                             let tab_name = item.Tables_in_<?=$database?>;
                             $('.tablist').append(`<li class="${tab_name}">Структура таблицы ${tab_name}: <ul class="${tab_name}"></ul></li>`);
@@ -140,7 +142,8 @@ require_once __DIR__.'/lib.php';
             $('.mainform').serialize(),
             function (data, result) {
                 $('output').html(data);
-                $('.result').show();
+                $('section.result').removeClass('hidden');
+                $('section.list').addClass('hidden');
             });
     });
 
@@ -154,7 +157,7 @@ require_once __DIR__.'/lib.php';
     }
 
     // dropcol - удалить колонку в существующей таблице
-    // chgcol - изменить колонку в существующей таблице
+    // chgecol - изменить колонку в существующей таблице
     $('.tablist').click(function(event) {
         if (event.target.tagName != 'IMG') { return; }
         let tabname = $(event.target).parentsUntil('ul.tablist').last().attr('class');
@@ -173,7 +176,7 @@ require_once __DIR__.'/lib.php';
                     }
                 );
                 break;
-            case 'changecol':
+            case 'changecol': // в процессе реализации:
                 /*$.post("query.php",
                     {typeQuery: "updatecol", id : id, numQuery: tab, assigned: val, sort: desc, column : col},
                     function(data, result) {
