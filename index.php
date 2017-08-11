@@ -94,23 +94,24 @@ require_once __DIR__.'/lib.php';
                 break;
             case 'list':
                 $.get('query.php',
-                    '', function (data_res, request) {
-                        let strAdd = '';
+                    '',
+                    function (data_res, request) {
                         let strFld = '';
 
                         $('.tablist').html('Таблицы базы данных ' + "<?php echo $database ?>");
                         let myData = JSON.parse(data_res);
                         myData.forEach(function (item) {
-                            strAdd += `<li>${item.Tables_in_global}<table><tbody class=''>`;
-                            myData.fld.forEach(function(item){
-                                strFld = $('.template').clone();
+                            let tab_name = item.Tables_in_global;
+                            $('.tablist').append(`<li>${tab_name}<table class="${tab_name}"></table></li>`);
+                            item.fld.forEach(function (fld) {
+                                $('.template').clone().appendTo(`table.${tab_name}`).removeClass('template').addClass(tab_name);
+                                // устанавливаем данные про поля:
+                                
                             });
-                            strAdd += '</tbody></table></li>';
                         });
-                        $('.tablist').append(strAdd);
                     });
                 break;
-        }
+        };
     });
 
     // плюс - добваить колонку (строку в таблице)
