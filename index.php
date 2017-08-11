@@ -102,19 +102,23 @@ require_once __DIR__.'/lib.php';
                         let myData = JSON.parse(data_res);
                         myData.forEach(function (item) {
                             let tab_name = item.Tables_in_global;
-                            $('.tablist').append(`<li>${tab_name}<table class="${tab_name}"></table></li>`);
+                            $('.tablist').append(`<li>Структура таблицы ${tab_name}: <ul class="${tab_name}"></ul></li>`);
+                            strFld = '';
                             item.fld.forEach(function (fld) {
-                                $('.template').clone().appendTo(`table.${tab_name}`).removeClass('template').addClass(tab_name);
-                                // устанавливаем данные про поля:
-                                
+                                strFld += `<li class="${fld.Field}">${fld.Field} ${fld.Type}`;
+                                // две кнопки на удаление и на изменение колонки:
+                                strFld += '<img src="./img/drop.png" title="Удалить колонку" class="dropcol">';
+                                strFld += '<img src="./img/edit.png" title="Редактировать колонку" class="changecol">';
+                                strFld +='</li>';
                             });
+                            $('ul.' + tab_name).html(strFld);
                         });
                     });
                 break;
         };
     });
 
-    // плюс - добваить колонку (строку в таблице)
+    // плюс - добваить колонку (строку в новой таблице)
     $('.addcol').click(function(event) {
         $('.template').clone().appendTo('tbody').removeClass('template').attr('id','tab1_' + counter);
         $('#tab1_' + counter + ' input[name^="fldname"]').attr('value', 'field' + counter);
@@ -122,7 +126,7 @@ require_once __DIR__.'/lib.php';
         chkButton();
     });
 
-    // минус - удалить колонку (строку в таблице)
+    // минус - удалить колонку (строку в новой таблице )
     $('tbody').click(function(event) {
         if (! $(event.target).hasClass('delcol')) {return; }
         $(event.target).parentsUntil('tbody').last().remove();
