@@ -66,17 +66,19 @@ require_once __DIR__.'/lib.php';
     </li>
     <li>
         <a href="#" class="mainMenu">Список таблиц БД</a>
-        <div class="hidden chgecol_form">
+        <div class="hidden chgecol_form" id="editcol">
             <form class="subform" method="POST" enctype="application/x-www-form-urlencoded" action="query.php">
                 <fieldset>
-                    <caption>Редактирование элемента</caption>
-                    <label><input type="text" id="newcol" name="newcol" required></label>
-                    <select id="newtype" name="newtype" required>
+                    <legend>Редактирование элемента</legend>
+                    <label>Название<input type="text" id="newcol" name="newcol" required></label><br/>
+                    <label>Тип
+                        <select id="newtype" name="newtype" required>
                         <option>INT(1)</option>
                         <option>VARCHAR(40)</option>
                         <option>DECIMAL</option>
                         <option>DATETIME</option>
-                    </select><br/>
+                        </select>
+                    </label><br/>
                     <input type="submit" value="Редактировать поле" name="changesubmit">
                 </fieldset>
             </form>
@@ -98,6 +100,9 @@ require_once __DIR__.'/lib.php';
 <script>
     'use strict';
     let counter = 1; // счетчик добавленных полей
+    let tabname;
+    let colname;
+
     chkButton();
     $('.mainMenu').click(function(event) {
         $(this).nextAll('section').toggleClass('hidden');
@@ -152,9 +157,8 @@ require_once __DIR__.'/lib.php';
     // chgecol - изменить колонку в существующей таблице
     $('.tablist').click(function(event) {
         if (event.target.tagName != 'IMG') { return; }
-        let tabname = $(event.target).parentsUntil('ul.tablist').last().attr('class');
-        let colname = $(event.target).parentsUntil('ul.' + tabname).last().attr('class');
-            console.log(tabname, colname, $(event.target).attr('class'));
+        tabname = $(event.target).parentsUntil('ul.tablist').last().attr('class');
+        colname = $(event.target).parentsUntil('ul.' + tabname).last().attr('class');
 
         switch ($(event.target).attr('class')) {
             case 'dropcol':
@@ -170,19 +174,25 @@ require_once __DIR__.'/lib.php';
                 );
                 break;
             case 'chgecol': // в процессе реализации:
-                console.log('z tet!');
                 $('#newcol').attr('value', colname);
                 $('#newtype').attr('value', $(event.target).parentsUntil('ul.' + tabname).attr('data-type'));
-                console.log($('.chgecol_form').attr('class'));
                 $('.chgecol_form').removeClass('hidden');
                 break;
         }
     });
 
-    $('input[name=changesubmit]').click(function() {
+    $('input[ name=changesubmit]').click(function() {
+        event.preventDefault();
+        let newcol = $('#newcol').attr('value');
+        let newtype = $('#newtype').attr('value');
+
         $.post("query.php",
-            {typeQuery: "updatecol", id : id, numQuery: tab, assigned: val, sort: desc, column : col},
+            {typeQuery: "updatecol", tab: tabname, col: colname, newcol: newcol, newtype: newtype},
             function(data, result) {
+                $('output').html(data);
+                $('.result').show();
+                $('.chgecol_form').addClass('hidden');
+                getTableList();
             }
         )
     });
@@ -203,7 +213,7 @@ require_once __DIR__.'/lib.php';
                         strFld += `<li class="${fld.Field}" data-type="${fld.Type}">${fld.Field} ${fld.Type}`;
                         // две кнопки на удаление и на изменение колонки:
                         strFld += '<img src="./img/drop.png" title="Удалить колонку" class="dropcol">';
-                        strFld += '<img src="./img/edit.png" title="Редактировать колонку" class="chgecol">';
+                        strFld += '<a href="#editcol"><img src="./img/edit.png" title="Редактировать колонку" class="chgecol"></a>';
                         strFld +='</li>';
                     });
                     $('ul.' + tab_name).html(strFld);
