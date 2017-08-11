@@ -79,7 +79,7 @@ require_once __DIR__.'/lib.php';
                         <option>DATETIME</option>
                         </select>
                     </label><br/>
-                    <input type="submit" value="Редактировать поле" name="changesubmit">
+                    <input type="submit" value="Сохранить изменения" name="changesubmit">
                 </fieldset>
             </form>
         </div>
