@@ -144,7 +144,7 @@ require_once __DIR__.'/lib.php';
             });
     });
 
-    //состояние кнопки ДОбавить таблицу:
+    //состояние кнопки Добавить таблицу:
     function chkButton() {
         if ($('tbody').children('tr').length <= 1) {
             $('input[name=createsubmit]').attr('disabled', true);
@@ -156,6 +156,7 @@ require_once __DIR__.'/lib.php';
     // dropcol - удалить колонку в существующей таблице
     // chgecol - изменить колонку в существующей таблице
     $('.tablist').click(function(event) {
+
         if (event.target.tagName != 'IMG') { return; }
         tabname = $(event.target).parentsUntil('ul.tablist').last().attr('class');
         colname = $(event.target).parentsUntil('ul.' + tabname).last().attr('class');
@@ -203,7 +204,6 @@ require_once __DIR__.'/lib.php';
             function (data_res, request) {
                 let strFld = '';
                 let myData = '';
-
                 $('.tablist').html('Таблицы базы данных ' + "<?php echo $database ?>");
                 try {
                     myData = JSON.parse(data_res);

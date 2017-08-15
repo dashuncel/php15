@@ -4,12 +4,7 @@ require_once __DIR__.'/lib.php';
 
 // get - на список таблиц и на список полей в таблицах
 if ($_SERVER["REQUEST_METHOD"] == 'GET') {
-    $tablist = prepareTable("Show tables");
-    $tabcopy = $tablist;
-    foreach ($tablist as $key => $tab) {
-        $tabcopy[$key]['fld'] = prepareTable("Describe `{$tab['Tables_in_' . $database]}`");
-    }
-    $result = json_encode($tabcopy);
+    $result = getTables();
     echo $result;
 }
 elseif ($_SERVER["REQUEST_METHOD"] == 'POST') {
@@ -68,10 +63,15 @@ elseif ($_SERVER["REQUEST_METHOD"] == 'POST') {
             $query = "ALTER TABLE {$_POST['tab']} CHANGE {$_POST['col']} {$_POST['newcol']} {$_POST['newtype']}";
             break;
         case 'dropcol' : // удаление поля в таблице:
-            $query = "ALTER TABLE {$_POST['tab']} DROP COLUMN {$_POST['col']}";
+            if (getCountCol($_POST['tab']) <= 1) {
+                $query = "DROP TABLE {$_POST['tab']}";
+            }
+            else {
+                $query = "ALTER TABLE {$_POST['tab']} DROP COLUMN {$_POST['col']}";
+            }
             break;
     }
-    $result = prepareTable($query);
+    $result = prepareTable($query, $typeQuery);
     echo "Запрос $query<br />";
 
     if (count($result) == 0 || ($result == '')) {
